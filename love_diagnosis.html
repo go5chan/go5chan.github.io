@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>その恋、遊ばれてない？彼の本気度診断</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Yu Gothic', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: bold;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.95;
+            line-height: 1.6;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .start-screen {
+            text-align: center;
+        }
+
+        .start-screen h2 {
+            color: #667eea;
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .start-screen ul {
+            text-align: left;
+            margin: 20px 0;
+            padding-left: 25px;
+            color: #555;
+            line-height: 2;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .question-screen {
+            display: none;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .question-number {
+            color: #667eea;
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .question-text {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 18px 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        .option:hover {
+            background: #f0f0ff;
+            border-color: #667eea;
+            transform: translateX(5px);
+        }
+
+        .option.selected {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            border-color: #667eea;
+            font-weight: bold;
+        }
+
+        .result-screen {
+            display: none;
+        }
+
+        .result-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .result-badge .emoji {
+            font-size: 60px;
+            margin-bottom: 10px;
+        }
+
+        .result-badge h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .result-badge .level {
+            font-size: 16px;
+            opacity: 0.95;
+        }
+
+        .result-description {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            line-height: 1.8;
+            color: #333;
+        }
+
+        .result-description h3 {
+            color: #667eea;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .advice-box {
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe5ff 100%);
+            border-left: 4px solid #764ba2;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .advice-box h4 {
+            color: #764ba2;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .line-button {
+            display: block;
+            background: #06C755;
+            color: white;
+            text-decoration: none;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 25px 0;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(6, 199, 85, 0.3);
+        }
+
+        .line-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(6, 199, 85, 0.5);
+        }
+
+        .line-button::before {
+            content: "📱 ";
+            font-size: 20px;
+        }
+
+        .retry-button {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .retry-button:hover {
+            background: #f0f0ff;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 20px;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .question-text {
+                font-size: 16px;
+            }
+
+            .option {
+                padding: 15px;
+                font-size: 14px;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💔 その恋、遊ばれてない？<br>彼の本気度診断 💕</h1>
+            <p>たった15の質問で、彼の本当の気持ちが見えてくる...</p>
+        </div>
+
+        <div class="content">
+            <!-- スタート画面 -->
+            <div class="start-screen" id="startScreen">
+                <h2>この診断でわかること</h2>
+                <ul>
+                    <li>彼があなたに本気かどうか</li>
+                    <li>今の関係性のレベル</li>
+                    <li>彼の本気度を上げる方法</li>
+                    <li>このまま進んでいいのか</li>
+                </ul>
+                <p style="color: #888; font-size: 14px; margin-top: 20px;">所要時間：約3分</p>
+                <button class="btn" onclick="startDiagnosis()">診断をスタート</button>
+            </div>
+
+            <!-- 質問画面 -->
+            <div class="question-screen" id="questionScreen">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressBar"></div>
+                </div>
+                <div class="question-number" id="questionNumber"></div>
+                <div class="question-text" id="questionText"></div>
+                <div class="options" id="optionsContainer"></div>
+            </div>
+
+            <!-- 結果画面 -->
+            <div class="result-screen" id="resultScreen">
+                <div class="result-badge" id="resultBadge"></div>
+                <div class="result-description" id="resultDescription"></div>
+                <a href="https://lin.ee/NRHkCKck" target="_blank" class="line-button">
+                    公式LINEで詳しい恋愛アドバイスを受け取る
+                </a>
+                <button class="btn retry-button" onclick="location.reload()">もう一度診断する</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 質問データ
+        const questions = [
+            // A. コミュニケーション系（5問）
+            {
+                category: 'A',
+                text: '彼からの連絡頻度は？',
+                options: [
+                    { text: '毎日複数回', score: 4 },
+                    { text: '毎日1回', score: 3 },
+                    { text: '2-3日に1回', score: 2 },
+                    { text: '週1回以下', score: 1 }
+                ]
+            },
+            {
+                category: 'A',
+                text: 'LINEの返信スピードは？',
+                options: [
+                    { text: '即レス〜1時間以内', score: 4 },
+                    { text: '2-4時間以内', score: 3 },
+                    { text: '半日以内', score: 2 },
+                    { text: '1日以上', score: 1 }
+                ]
+            },
+            {
+                category: 'A',
+                text: 'メッセージの質は？',
+                options: [
+                    { text: '長文で質問や感想が多い', score: 4 },
+                    { text: '会話が続く内容', score: 3 },
+                    { text: '短文だが返事はくれる', score: 2 },
+                    { text: 'スタンプや一言のみ', score: 1 }
+                ]
+            },
+            {
+                category: 'A',
+                text: 'あなたの話に対する反応は？',
+                options: [
+                    { text: '詳しく聞いて覚えている', score: 4 },
+                    { text: '興味深く聞いてくれる', score: 3 },
+                    { text: '一応聞いている', score: 2 },
+                    { text: '上の空・流している', score: 1 }
+                ]
+            },
+            {
+                category: 'A',
+                text: '電話やビデオ通話について？',
+                options: [
+                    { text: '彼から提案してよくする', score: 4 },
+                    { text: 'あなたの提案に応じてくれる', score: 3 },
+                    { text: 'たまにする程度', score: 2 },
+                    { text: 'ほとんど・全くしない', score: 1 }
+                ]
+            },
+            // B. デート・時間投資系（4問）
+            {
+                category: 'B',
+                text: 'デートの企画は？',
+                options: [
+                    { text: '彼が積極的に素敵な場所を提案', score: 4 },
+                    { text: '彼からの提案が多い', score: 3 },
+                    { text: '半々で提案し合う', score: 2 },
+                    { text: 'あなたが提案することが多い', score: 1 }
+                ]
+            },
+            {
+                category: 'B',
+                text: 'デート中の態度は？',
+                options: [
+                    { text: 'スマホを見ず完全にあなたに集中', score: 4 },
+                    { text: '基本的に集中してくれる', score: 3 },
+                    { text: 'たまにスマホを確認', score: 2 },
+                    { text: 'よくスマホを触る', score: 1 }
+                ]
+            },
+            {
+                category: 'B',
+                text: 'デートの時間は？',
+                options: [
+                    { text: '丸一日や宿泊など長時間', score: 4 },
+                    { text: '半日程度しっかり時間を取る', score: 3 },
+                    { text: '2-3時間程度', score: 2 },
+                    { text: '1時間程度の短時間', score: 1 }
+                ]
+            },
+            {
+                category: 'B',
+                text: '急な誘いへの対応は？',
+                options: [
+                    { text: '予定を調整してでも会おうとする', score: 4 },
+                    { text: '可能な限り時間を作ってくれる', score: 3 },
+                    { text: '空いている時だけ応じる', score: 2 },
+                    { text: 'ほとんど断られる', score: 1 }
+                ]
+            },
+            // C. 特別扱い・感情表現系（3問）
+            {
+                category: 'C',
+                text: 'あなたへの態度は他の女性と比べて？',
+                options: [
+                    { text: '明らかに特別扱い', score: 4 },
+                    { text: '優しく大切にしてくれる', score: 3 },
+                    { text: '他の女友達と同じような感じ', score: 2 },
+                    { text: '特別感を感じない', score: 1 }
+                ]
+            },
+            {
+                category: 'C',
+                text: '記念日や大切な日について？',
+                options: [
+                    { text: '覚えていてサプライズもある', score: 4 },
+                    { text: 'きちんと覚えて祝ってくれる', score: 3 },
+                    { text: '言えば思い出して対応', score: 2 },
+                    { text: 'あまり重視していない様子', score: 1 }
+                ]
+            },
+            {
+                category: 'C',
+                text: '感情表現について？',
+                options: [
+                    { text: '「好き」「大切」など愛情表現がある', score: 4 },
+                    { text: '言葉少なめだが愛情を感じる', score: 3 },
+                    { text: 'たまに優しい言葉をかけてくれる', score: 2 },
+                    { text: '感情表現はほとんどない', score: 1 }
+                ]
+            },
+            // D. 将来性・関係発展系（3問）
+            {
+                category: 'D',
+                text: '将来の話について？',
+                options: [
+                    { text: '具体的な将来計画を一緒に考える', score: 4 },
+                    { text: '将来について真剣に話し合う', score: 3 },
+                    { text: 'たまに将来の話が出る', score: 2 },
+                    { text: '将来の話はしない・避ける', score: 1 }
+                ]
+            },
+            {
+                category: 'D',
+                text: '友人・家族との関係は？',
+                options: [
+                    { text: '紹介済み、または近々紹介予定', score: 4 },
+                    { text: '紹介したいと言われている', score: 3 },
+                    { text: '友人・家族の話は出るが紹介話はない', score: 2 },
+                    { text: '彼のプライベートは謎', score: 1 }
+                ]
+            },
+            {
+                category: 'D',
+                text: '関係の独占性について？',
+                options: [
+                    { text: '他の女性の話は一切しない', score: 4 },
+                    { text: '友達として他の女性の話をする程度', score: 3 },
+                    { text: '時々他の女性を褒めたりする', score: 2 },
+                    { text: '他の女性に興味がありそう', score: 1 }
+                ]
+            }
+        ];
+
+        let currentQuestion = 0;
+        let answers = {
+            A: [],
+            B: [],
+            C: [],
+            D: []
+        };
+
+        function startDiagnosis() {
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('questionScreen').style.display = 'block';
+            showQuestion();
+        }
+
+        function showQuestion() {
+            if (currentQuestion >= questions.length) {
+                calculateResult();
+                return;
+            }
+
+            const question = questions[currentQuestion];
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('questionNumber').textContent = `質問 ${currentQuestion + 1} / ${questions.length}`;
+            document.getElementById('questionText').textContent = question.text;
+            
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.textContent = option.text;
+                optionDiv.onclick = () => selectOption(index, option.score, question.category);
+                optionsContainer.appendChild(optionDiv);
+            });
+        }
+
+        function selectOption(index, score, category) {
+            answers[category].push(score);
+            currentQuestion++;
+            
+            setTimeout(() => {
+                showQuestion();
+            }, 200);
+        }
+
+        function calculateResult() {
+            // カテゴリー別合計と重み付け
+            const scoreA = answers.A.reduce((a, b) => a + b, 0) * 1.2;
+            const scoreB = answers.B.reduce((a, b) => a + b, 0) * 1.3;
+            const scoreC = answers.C.reduce((a, b) => a + b, 0) * 1.0;
+            const scoreD = answers.D.reduce((a, b) => a + b, 0) * 1.5;
+            
+            const totalScore = scoreA + scoreB + scoreC + scoreD;
+            
+            // 特別条件チェック
+            const d1Count = answers.D.filter(s => s === 1).length;
+            const d4Count = answers.D.filter(s => s === 4).length;
+            const lowCount = [...answers.A, ...answers.B].filter(s => s === 1).length;
+            
+            let result;
+            
+            // 特別判定
+            if (d4Count >= 2 && totalScore >= 60) {
+                result = getResultData('marriage');
+            } else if (d1Count >= 2) {
+                result = getResultData('low');
+            } else if (lowCount >= 3) {
+                result = getResultData('medium-low');
+            } else if (totalScore >= 55) {
+                result = getResultData('super-high');
+            } else if (totalScore >= 45) {
+                result = getResultData('high');
+            } else if (totalScore >= 35) {
+                result = getResultData('medium-high');
+            } else if (totalScore >= 25) {
+                result = getResultData('medium');
+            } else if (totalScore >= 18) {
+                result = getResultData('slightly-low');
+            } else {
+                result = getResultData('low');
+            }
+            
+            showResult(result);
+        }
+
+        function getResultData(level) {
+            const results = {
+                'marriage': {
+                    emoji: '💍',
+                    title: '本気度MAX・結婚レベル',
+                    level: '彼はあなたとの結婚を真剣に考えています！',
+                    description: '素晴らしい結果です！彼はあなたを人生のパートナーとして見ており、将来を真剣に考えています。このまま信頼関係を深めていけば、プロポーズも時間の問題かもしれません。',
+                    advice: '彼の家族との関係も大切にしながら、二人の将来について具体的に話し合う時期です。焦らず、でも確実に関係を深めていきましょう。',
+                    cta: 'この関係を確実にゴールインに導く最終戦略を個別指導！'
+                },
+                'super-high': {
+                    emoji: '🔥',
+                    title: '本気度超高・真剣交際',
+                    level: '彼はあなたに完全に本気です！',
+                    description: '彼はあなたを最優先に考え、真剣に交際しています。将来を見据えた関係性が築けており、このまま進めば結婚も視野に入ってくるでしょう。',
+                    advice: '今の関係を維持しながら、さらに深い絆を築いていきましょう。彼の夢や目標をサポートする姿勢が、より強固な関係につながります。',
+                    cta: 'さらに愛される女性になる秘訣を特別にお教えします♡'
+                },
+                'high': {
+                    emoji: '💕',
+                    title: '本気度高・恋愛発展中',
+                    level: '本気度がどんどん上がってます！',
+                    description: '彼の中であなたの存在がどんどん大きくなっています。恋愛関係として順調に発展しており、あと少しで真剣度MAXに到達しそうです。',
+                    advice: '彼の気持ちを確実なものにするため、あなたの魅力をさらにアピールしていきましょう。ただし、焦りは禁物。自然体でいることが大切です。',
+                    cta: '彼の本気度を確実にMAXにする恋愛テクニックを伝授！'
+                },
+                'medium-high': {
+                    emoji: '❤️',
+                    title: '本気度中高・様子見中',
+                    level: '好意はあるが慎重に見極め中',
+                    description: '彼はあなたに好感を持っていますが、まだ慎重に関係を見極めている段階です。あなたのアプローチ次第で、本気度を一気に上げることができます。',
+                    advice: '彼に「この子は特別だ」と思わせる行動を心がけましょう。他の女性との違いを見せることが重要です。',
+                    cta: '彼の心を掴んで本気度を上げる実践テクニックを公開！'
+                },
+                'medium': {
+                    emoji: '💛',
+                    title: '本気度中・友達以上恋人未満',
+                    level: '興味はあるがまだ友達寄り',
+                    description: '彼はあなたに興味を持ち始めていますが、まだ恋愛対象として完全には意識していない段階です。ここから関係を発展させるには戦略が必要です。',
+                    advice: '女性として意識してもらうためのアプローチが必要です。外見の変化や、彼の前でのふるまいを工夫してみましょう。',
+                    cta: '友達から恋人へ！関係を発展させる具体的ステップを伝授'
+                },
+                'slightly-low': {
+                    emoji: '💙',
+                    title: '本気度やや低・友達関係',
+                    level: '友達として大切にされている',
+                    description: '残念ながら、現時点では友達としての関係が強いようです。ただし、これは「まだ」恋愛対象として見られていないだけで、可能性がないわけではありません。',
+                    advice: 'アプローチ方法を大幅に変える必要があります。今のままでは友達止まりの可能性が高いです。',
+                    cta: '友達関係から逆転恋愛を成功させた実例とノウハウを大公開！'
+                },
+                'low': {
+                    emoji: '💔',
+                    title: '本気度低・都合の良い関係',
+                    level: '残念ながら本気ではありません',
+                    description: '厳しい結果ですが、彼はあなたを恋愛対象として見ていない可能性が高いです。都合の良い関係になっている危険性もあります。',
+                    advice: 'このまま進むのは危険です。関係を見直すか、思い切って距離を置くことも考えましょう。あなたを本当に大切にしてくれる人を見つけることも選択肢の一つです。',
+                    cta: '諦める前に！最後の逆転戦略を個別アドバイス'
+                }
+            };
+            
+            return results[level];
+        }
+
+        function showResult(result) {
+            document.getElementById('questionScreen').style.display = 'none';
+            document.getElementById('resultScreen').style.display = 'block';
+            
+            document.getElementById('resultBadge').innerHTML = `
+                <div class="emoji">${result.emoji}</div>
+                <h2>${result.title}</h2>
+                <div class="level">${result.level}</div>
+            `;
+            
+            document.getElementById('resultDescription').innerHTML = `
+                <h3>診断結果</h3>
+                <p>${result.description}</p>
+                <div class="advice-box">
+                    <h4>💡 今後のアドバイス</h4>
+                    <p>${result.advice}</p>
+                </div>
+                <p style="text-align: center; margin-top: 20px; color: #667eea; font-weight: bold;">
+                    ${result.cta}
+                </p>
+            `;
+            
+            // スクロールをトップに
+            window.scrollTo(0, 0);
+        }
+    </script>
+</body>
+</html>
